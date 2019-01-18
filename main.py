@@ -6,6 +6,8 @@ from random import choice, randint
 EMPTY = " "
 OBSTACLE = "0"
 PLAYER = "X"
+HORIZONTAL_BORDER = "-"
+VERTICAL_BORDER = "|"
 # NORTH = ["n", "N"]
 # EAST = ["e", "E"]
 # SOUTH = ["s", "S"]
@@ -36,7 +38,10 @@ def main():
         return [[choice(tiles(empty_ratio)) for _ in range(j_length)] for _ in range(i_length)]
 
     def render_world(data):
-        return "".join(["".join([*[a for a in line], "\n"]) for line in data])
+        border = HORIZONTAL_BORDER*(len(data[0])+2) + "\n"
+        return "".join([border,
+                        *["".join([VERTICAL_BORDER, *[a for a in line], VERTICAL_BORDER + "\n"]) for line in data],
+                        border])
 
     def generate_random_position(limits):
         i_length, j_length = limits
@@ -48,7 +53,6 @@ def main():
             generate_start_position(data, limits)
         return i, j
 
-    # bug! when illegal move!
     def move(data, position):
         i, j = position
         direction = input("Which way to move?")
@@ -62,10 +66,10 @@ def main():
             j += 1
         else:
             print("Use wasd!")
-            move(data, position)
-        if data[i][j] is not EMPTY:
+            return move(data, position)
+        if (i + 1 > len(list(zip(*data))[0])) or (j + 1 > len(data[0])) or data[i][j] is not EMPTY:
             print("You can't do that!")
-            move(data, position)
+            return move(data, position)
         return i, j
 
     def game(data, position):
