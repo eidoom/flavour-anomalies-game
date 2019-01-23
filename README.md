@@ -25,4 +25,4 @@ Dependencies:
 
 * `python` 3.6+
 
-* Python module `termcolor`
+* Python module [`termcolor`](https://pypi.org/project/termcolor/)
