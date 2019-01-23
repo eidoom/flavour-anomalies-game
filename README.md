@@ -23,4 +23,6 @@ python3 main.py -h
 
 Dependencies:
 
-* Python 3.6+
+* `python` 3.6+
+
+* Python module `termcolor`

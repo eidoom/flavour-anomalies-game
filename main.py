@@ -1,19 +1,31 @@
 #!/usr/bin/env python
 # coding=UTF-8
 
-from random import choice, randint
 from argparse import ArgumentParser
+from random import choice, randint
 from time import perf_counter
 
-TITLE = ("             _    _        \n"
-         "\ \  _  / / / \  | \  |    \n"
-         " \ \/_\/ / | 0 | | /  |    \n"
-         "  \_/ \_/   \_/  | \  |__  d \n")
+from termcolor import colored
+
+TITLE = colored("             _    _          \n"
+                "\ \  _  / / / \  | \  |      \n"
+                " \ \/_\/ / | 0 | | /  |      \n"
+                "  \_/ \_/   \_/  | \  |__  ", "cyan") + colored("d \n", "yellow")
+
+PLAYER_SYMBOL = "X"
+END_SYMBOL = "A"
+
+PLAYER_COLOUR = "yellow"
+END_COLOUR = "red"
 
 EMPTY = " "
-OBSTACLES = ["T", "o"]
-END = "A"
-PLAYER = "X"
+ROCK = colored("o", "magenta")
+TREE = colored("T", "green")
+
+OBSTACLES = [ROCK, TREE]
+END = colored(END_SYMBOL, END_COLOUR, attrs=["bold"])
+PLAYER = colored(PLAYER_SYMBOL, PLAYER_COLOUR, attrs=["bold"])
+PLAYER_AT_END = colored(PLAYER_SYMBOL, END_COLOUR, attrs=["bold"])
 
 HORIZONTAL_BORDER = "-"
 VERTICAL_BORDER = "|"
@@ -37,7 +49,7 @@ SOUTH = ["s", "S"]
 WEST = ["a", "A"]
 
 UNKNOWN_MAP_SIZE_PROMPT = "Unknown map size"
-START_PROMPT = "You are the X. Use wasd controls to move. Get to the A!"
+START_PROMPT = f"You are the {PLAYER}. Use wasd controls to move. Watch out for rocks {ROCK} and trees {TREE}. Get to the {END}!"
 MOVE_PROMPT = "Which way to move?"
 WRONG_KEY_PROMPT = "Use wasd!"
 INVALID_MOVE_PROMPT = "You can't do that!"
@@ -102,10 +114,12 @@ def move(data, position):
 
 def turn(data, position, end, moves=0):
     i, j = position
+    if position == end:
+        data[i][j] = PLAYER_AT_END
+        print(render_world(data))
+        return moves
     data[i][j] = PLAYER
     print(render_world(data))
-    if position == end:
-        return moves
     data[i][j] = EMPTY
     return turn(data, move(data, position), end, moves + 1)
 
