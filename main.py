@@ -11,7 +11,7 @@ TITLE = ("             _    _        \n"
          "  \_/ \_/   \_/  | \  |__  d \n")
 
 EMPTY = " "
-OBSTACLES = ["T", "O"]
+OBSTACLES = ["T", "o"]
 END = "A"
 PLAYER = "X"
 
