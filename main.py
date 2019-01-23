@@ -153,9 +153,10 @@ def parse_arguments():
 
 def main():
     print(TITLE)
+    arguments = parse_arguments()
     print(START_PROMPT)
     start_time = perf_counter()
-    moves = game(*parse_arguments())
+    moves = game(*arguments)
     print(WIN_PROMPT)
     print("\nStatistics:\n"
           f"Moves: {moves}\n"

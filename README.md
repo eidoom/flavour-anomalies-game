@@ -15,7 +15,7 @@ cd flavour-anomalies-game
 python3 main.py
 ```
 
-Instructions:
+Instructions for options:
 
 ```shell
 python3 main.py -h
