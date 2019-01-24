@@ -74,7 +74,7 @@ def world_matrix(limits, empty_ratio):
 
 
 def render_world(data):
-    border = HORIZONTAL_BORDER * (len(data[0]) + 2) + "\n"
+    border = "#" + HORIZONTAL_BORDER * len(data[0]) + "#\n"
     return "".join([border,
                     *["".join([VERTICAL_BORDER, *[a for a in line], VERTICAL_BORDER + "\n"]) for line in data],
                     border])
