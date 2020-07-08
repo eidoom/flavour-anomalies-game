@@ -28,4 +28,4 @@ python3 main.py -h
 ### Dependencies:
 
 * `python` 3.6+
-* Python module [`termcolor`](https://pypi.org/project/termcolor/)
+* Python module [`termcolor`](https://pypi.org/project/termcolor/) (probably `python3-termcolor` in your package manager)
