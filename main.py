@@ -7,10 +7,16 @@ from time import perf_counter
 
 from termcolor import colored
 
-TITLE = colored("             _    _          \n"
-                "\ \  _  / / / \  | \  |      \n"
-                " \ \/_\/ / | 0 | | /  |      \n"
-                "  \_/ \_/   \_/  | \  |__  ", "cyan") + colored("d \n", "yellow")
+TITLE = (
+    colored(
+        r"""
+\ \  _  / / / \  | \  |
+ \ \/_\/ / | 0 | | /  |
+  \_/ \_/   \_/  | \  |__""",
+        "cyan",
+    )
+    + colored("  d \n", "yellow")
+)
 
 PLAYER_SYMBOL = "X"
 END_SYMBOL = "A"
@@ -38,11 +44,6 @@ SMALL_MAP = (12, 50)
 MEDIUM_MAP = (25, 100)
 LARGE_MAP = (50, 200)
 
-# NORTH = ["n", "N"]
-# EAST = ["e", "E"]
-# SOUTH = ["s", "S"]
-# WEST = ["w", "W"]
-
 NORTH = ["w", "W"]
 EAST = ["d", "D"]
 SOUTH = ["s", "S"]
@@ -65,19 +66,25 @@ def tiles(empty_ratio):
     return [EMPTY] * empty_ratio + OBSTACLES
 
 
-# def empty_world_matrix(length):
-#     return [EMPTY * length] * length
-
 def world_matrix(limits, empty_ratio):
     i_length, j_length = limits
-    return [[choice(tiles(empty_ratio)) for _ in range(j_length)] for _ in range(i_length)]
+    return [
+        [choice(tiles(empty_ratio)) for _ in range(j_length)] for _ in range(i_length)
+    ]
 
 
 def render_world(data):
     border = "#" + HORIZONTAL_BORDER * len(data[0]) + "#\n"
-    return "".join([border,
-                    *["".join([VERTICAL_BORDER, *[a for a in line], VERTICAL_BORDER + "\n"]) for line in data],
-                    border])
+    return "".join(
+        [
+            border,
+            *[
+                "".join([VERTICAL_BORDER, *[a for a in line], VERTICAL_BORDER + "\n"])
+                for line in data
+            ],
+            border,
+        ]
+    )
 
 
 def generate_random_position(limits):
@@ -106,7 +113,15 @@ def move(data, position):
     else:
         print(WRONG_KEY_PROMPT)
         return move(data, position)
-    if any([i < 0, j < 0, i + 1 > len(list(zip(*data))[0]), j + 1 > len(data[0]), data[i][j] in OBSTACLES]):
+    if any(
+        [
+            i < 0,
+            j < 0,
+            i + 1 > len(list(zip(*data))[0]),
+            j + 1 > len(data[0]),
+            data[i][j] in OBSTACLES,
+        ]
+    ):
         print(INVALID_MOVE_PROMPT)
         return move(data, position)
     return i, j
@@ -136,18 +151,38 @@ def game(i_length, j_length, emptiness):
 
 def parse_arguments():
     parser = ArgumentParser()
-    parser.add_argument("-m", "--map-size", type=str, default=SMALL,
-                        help=f"Set the map size to {SMALL} ({map_size_to_text(SMALL_MAP)}), "
-                        f"{MEDIUM} ({map_size_to_text(MEDIUM_MAP)}), or {LARGE} ({map_size_to_text(LARGE_MAP)}). "
-                        f"Can be overridden by setting map height and map width manually.")
-    parser.add_argument("-e", "--emptiness", type=int, default=30,
-                        help="Set the map emptiness factor. A higher emptiness factor means less obstacles.")
-    parser.add_argument("-y", "--map-height", type=int, default=None,
-                        help="Set the map height (vertical side length). "
-                             "Must also set map width. Overrides map size.")
-    parser.add_argument("-x", "--map-width", type=int, default=None,
-                        help="Set the map width (horizontal side length). "
-                             "Must also set map height. Overrides map size.")
+    parser.add_argument(
+        "-m",
+        "--map-size",
+        type=str,
+        default=SMALL,
+        help=f"Set the map size to {SMALL} ({map_size_to_text(SMALL_MAP)}), "
+        f"{MEDIUM} ({map_size_to_text(MEDIUM_MAP)}), or {LARGE} ({map_size_to_text(LARGE_MAP)}). "
+        f"Can be overridden by setting map height and map width manually.",
+    )
+    parser.add_argument(
+        "-e",
+        "--emptiness",
+        type=int,
+        default=30,
+        help="Set the map emptiness factor. A higher emptiness factor means less obstacles.",
+    )
+    parser.add_argument(
+        "-y",
+        "--map-height",
+        type=int,
+        default=None,
+        help="Set the map height (vertical side length). "
+        "Must also set map width. Overrides map size.",
+    )
+    parser.add_argument(
+        "-x",
+        "--map-width",
+        type=int,
+        default=None,
+        help="Set the map width (horizontal side length). "
+        "Must also set map height. Overrides map size.",
+    )
     args = parser.parse_args()
 
     if args.map_size == SMALL:
@@ -172,9 +207,11 @@ def main():
     start_time = perf_counter()
     moves = game(*arguments)
     print(WIN_PROMPT)
-    print("\nStatistics:\n"
-          f"Moves: {moves}\n"
-          f"Time: {perf_counter() - start_time} s")
+    print(
+        "\nStatistics:\n"
+        f"Moves: {moves}\n"
+        f"Time: {perf_counter() - start_time:.1f} s"
+    )
 
 
 if __name__ == "__main__":
